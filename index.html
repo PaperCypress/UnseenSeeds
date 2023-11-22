@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+ 
+<script src='assets/js/socket.io.js'></script>
+<script>
+var name;
+var seed;
+//var socket = io({
+  //extraHeaders: {
+  //  "ngrok-skip-browser-warning": "1"
+//  }
+//}).connect('http://localhost:52300');;
+var socket = io.connect('http://localhost:52300');
+function buttonclick(input,btnid){
+ // e.preventDefault();
+  console.log(input);
+  socket.emit("PlayerInput",input);
+  seed=input;
+  document.getElementById("SecondScreen").classList.remove('hidden');
+  document.getElementById("FirstScreen").classList.add('hidden');
+  //window.location.href = "/results?"+input;
+
+  //document.getElementById(btnid).blur();
+}
+function namesubmit(){
+  name =document.getElementById("name").value;
+  socket.emit("SetName",name);
+  document.getElementById("username").innerHTML=name;
+  document.getElementById("SecondScreen").classList.remove('hidden');
+  document.getElementById("FirstScreen").classList.add('hidden');
+
+}
+
+//ondisconnect
+//jump back when unity disconnect
+
+socket.on('RequestName',function(){
+  socket.emit("SetName",name);
+});
+</script>
+<title>看不見得種子</title>
+<style>
+
+@font-face {
+  font-family: "GenYoGothicB";
+  src: url("assets/GenYoGothicTW-Btrimmed.ttf") format("truetype");
+}
+@font-face {
+  font-family: "GenYoGothicR";
+  src: url("assets/GenYoGothicTW-Rtrimmed.ttf") format("truetype");
+}
+  html{
+    height: 100vh;
+    width: 100vw;
+  }
+  body{
+    height: 100vh;
+    width: 100vw;
+    background-image: url("Images/BG2.png");
+    overflow: hidden;
+    background-size: contain;
+  }
+  h2{
+    font-family: "GenYoGothicB", sans-serif;
+    text-align:center;
+    font-size: 3.6vh;
+    margin-top: 10vh;
+    letter-spacing: 0.15em;
+    color: #577343;
+    user-select: none;
+    margin-bottom: 0;
+  }
+  h3{
+    margin-top: 0.4em;
+    font-family: "GenYoGothicR", sans-serif;
+    letter-spacing: 0.1em;
+    font-size: 2.36vh;
+    text-align:center;
+    color: #886d25;
+  }
+  .hidden{
+    display: none!important;
+  }
+  .backlayer{
+    display: block;
+    position: fixed;
+    top: 0;bottom: 0;
+    width: 100%;height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+  #SecondScreen{
+  height: 100vh;
+  width: 100vw;
+  
+  margin: auto;
+
+
+ }
+  #ThirdScreen{
+  height:200vh;
+  width: 100vw;
+  margin: auto;
+
+
+  justify-content: center;
+  } 
+ 
+.button{
+  padding: 0;
+  margin: -3.5vh auto 0 auto;
+  width: 16vh;
+  height: 16vh;
+  background-color: rgba(255, 255, 255, 0);
+  display: block;
+  border:none;
+  box-sizing: border-box;
+  transition: border 0.2s;
+  text-align: center;
+  text-decoration: none;
+  
+
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.05s,box-shadow 0.05s;
+  -webkit-tap-highlight-color: transparent;
+  //
+}
+.button div{
+  background-size: contain;
+  width: 100%;
+  height: 100%;
+  
+}
+.shakey{
+  animation: floaty 6s ease-out infinite;
+}
+.shakex{
+  animation: floatx 7s ease-out infinite;
+}
+@keyframes floaty {
+  0% {
+		transform: translatey(20px);
+	}
+	50% {
+		transform: translatey(-20px);
+	}
+	100% {
+		transform: translatey(20px);
+	}
+}
+@keyframes floatx {
+  0% {
+		transform: translatex(20px);
+	}
+	50% {
+		transform: translatex(-20px);
+	}
+	100% {
+		transform: translatex(20px);
+	}
+}
+
+.button:focus{
+  outline: none;
+
+}
+
+#one{
+  margin-top: 4vh;
+   
+    transform:translate(-11vh,0);
+}
+#two {
+  transform:translate(12vh,-1vh);
+}
+
+#three {
+  transform:translate(-10vh,-1vh);
+
+}
+#four {
+  transform:translate(12vh,3vh);
+}
+#five {
+  transform:translate(-9vh,0);
+}
+#title{
+  background-image: url("Images/title.png");
+  width: 100vw;
+  height: 56.25vw;
+  margin: 22vh auto auto auto;
+  background-size:contain;
+  background-repeat: no-repeat;
+}
+#nameform{
+
+  margin: 2vh auto auto auto;
+  width: 80vw;
+  height: 40vw;
+  text-align: center;
+}
+#name{
+  background-color: rgb(255, 255, 255);
+  height:5.4vh;
+  width:62vw;
+  color: black;
+  font-size: 4.3vw;
+  letter-spacing: 0.1em;
+  text-align: center;
+border-radius: 38px;
+  border: 0;
+}
+
+
+
+
+@media (max-aspect-ratio: 1/1) {
+    .button{
+      
+        }
+
+      
+
+      }
+</style>
+</head>
+
+<body>
+  <div class="backlayer">
+
+  </div>
+<div id="FirstScreen">
+  <div id="title">
+
+  </div>
+  <form id="nameform" onsubmit="return false">
+    <input type="text" id="name" name="name"  placeholder="請輸入您的名字"><br><br>
+    <button onclick="namesubmit()" style="width: 31vw;height:9vw;margin-top: 2vh;border-radius: 90px;background-color: #846e32;color: white;font-size: 3.7vw;letter-spacing: 0.1em;">點擊開始</button>
+  </form>
+</div>
+
+<div class="hidden" id="SecondScreen">
+  <h2>嗨！<span id="username" style="letter-spacing: 0.1em;">陳柏安 </span></h2>
+  <h3>請點選一顆喜歡的種籽泡泡</h3>
+  <button value=1 id="one" class="button" onclick="buttonclick(this.value,this.id)" ><div class="shakex" id="x1"><div class="shakey buttonimg" id="y1" style=" background-image: url('Images/seed1.png');"></div></div></button>
+  <button value=2 id="two" class="button" onclick="buttonclick(this.value,this.id)" ><div class="shakex" id="x2"><div class="shakey buttonimg" id="y2" style=" background-image: url('Images/seed2.png');"></div></div></button>
+  <button value=3 id="three" class="button" onclick="buttonclick(this.value,this.id)" ><div class="shakex" id="x3"><div class="shakey buttonimg" id="y3" style=" background-image: url('Images/seed3.png');"></div></div></button>
+  <button value=4 id="four" class="button" onclick="buttonclick(this.value,this.id)" ><div class="shakex" id="x4"><div class="shakey buttonimg" id="y4" style=" background-image: url('Images/seed4.png');"></div></div></button>
+  <button value=5 id="five" class="button"  onclick="buttonclick(this.value,this.id)" ><div class="shakex" id="x5"><div class="shakey buttonimg" id="y5" style=" background-image: url('Images/seed5.png');"></div></div></button>
+
+</div>
+<div class="hidden" id="ThirdScreen">
+
+</div>
+</body>
+<script>
+  document.getElementById("y1").style.animationDelay = "-0.2s";
+  document.getElementById("y2").style.animationDelay = "-1.4s";
+  document.getElementById("y3").style.animationDelay = "-7.2s";
+  document.getElementById("y4").style.animationDelay = "-3.5s";
+  document.getElementById("y5").style.animationDelay = "-4.8s";  
+  document.getElementById("x1").style.animationDelay = "-4.8s";  
+  document.getElementById("x2").style.animationDelay = "-3.5s";
+  document.getElementById("x3").style.animationDelay = "-5.2s";  
+  document.getElementById("x4").style.animationDelay = "-1.4s";
+  document.getElementById("x5").style.animationDelay = "0s";
+
+  const snow = (data) => {
+const { element, snowSpeedX, snowSpeedY, snowSpeed, snowAmount, snowColor, snowWidth, snowHeight } = data
+
+class SnowFlake {
+	constructor() {
+		this.x = 0;
+		this.y = 0;
+		this.vx = 0;
+		this.vy = 0;
+		this.radius = 0;
+		this.alpha = 0;
+    this.sprite=0;
+    this.init();
+	}
+  init(){
+    this.radius = this.randBetween(100*window.innerHeight/2451, 1100*window.innerHeight/2451);
+		this.alpha = this.randBetween(0.2, 0.8);
+		this.x = this.randBetween(0, window.innerWidth);
+		this.y = this.randBetween(window.innerHeight, -window.innerHeight);
+		this.vx = this.randBetween(-snowSpeedX, snowSpeedX);
+		this.vy = this.randBetween(0, 3);
+    this.sprite = this.getRandomInt(25);
+  }
+	reset() {
+		this.radius = this.randBetween(100*window.innerHeight/2451, 1100*window.innerHeight/2451);
+		this.alpha = this.randBetween(0.2, 0.8);
+		this.x = this.randBetween(0, window.innerWidth);
+		this.y = this.randBetween(-window.innerHeight, -this.radius);
+		this.vx = this.randBetween(-snowSpeedX, snowSpeedX);
+		this.vy = this.randBetween(0, 3);
+    this.sprite = this.getRandomInt(25);
+	}
+
+	update() {
+		if(this.vy < snowSpeedY) {
+			this.vy += snowSpeed;
+		}
+		if(this.vx < snowSpeedX) {
+			this.vx += this.randBetween(0, 0.3);
+		}
+		if(this.vx > -snowSpeedX) {
+			this.vx -= this.randBetween(0, 0.3);
+		}
+		this.x += this.vx;
+		this.y += this.vy;
+		if(this.y - this.radius > window.innerHeight) {
+			this.reset();
+		}
+	}
+  getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+	randBetween(min, max) {
+		return min + Math.random() * (max - min);
+	}
+}
+var imageURLs = [
+  "Images/seed-01.png","Images/seed-02.png","Images/seed-03.png","Images/seed-04.png","Images/seed-05.png","Images/seed-06.png","Images/seed-07.png","Images/seed-08.png",
+  "Images/seed-09.png","Images/seed-10.png","Images/seed-11.png","Images/seed-12.png","Images/seed-13.png","Images/seed-14.png","Images/seed-15.png","Images/seed-16.png","Images/seed-17.png","Images/seed-18.png",
+  "Images/seed-19.png","Images/seed-20.png","Images/seed-21.png","Images/seed-22.png","Images/seed-23.png","Images/seed-24.png","Images/seed-25.png"
+];
+var imgs = [];
+var imagesOK=0;
+function loadAllImages(callback){
+    for (var i=0; i<imageURLs.length; i++) {
+        var img = new Image();
+        imgs.push(img);
+        img.onload = function(){ 
+            imagesOK++; 
+            if (imagesOK>=imageURLs.length ) {
+                callback();
+            }
+        };
+        img.onerror=function(){alert("image load failed");} 
+        img.crossOrigin="anonymous";
+        img.src = imageURLs[i];
+    }      
+}
+loadAllImages();
+class Snow {
+	constructor() {
+		this.canvas = document.createElement('canvas');
+		document.querySelector(element).appendChild(this.canvas);
+		this.ctx = this.canvas.getContext('2d');
+    
+		this.onResize();
+		window.addEventListener('resize', () => { this.onResize() });
+
+
+		this.updateBound = this.update.bind(this);
+		requestAnimationFrame(this.updateBound);
+
+		this.createSnowFlakes();
+	}
+
+	onResize() {
+		this.width = window.innerWidth;
+		this.height = window.innerHeight;
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+	}
+
+	createSnowFlakes() {
+		this.snowFlakesNum = snowAmount;
+		this.snowFlakes = [];
+		for (let i = 0; i < this.snowFlakesNum; i++) {
+			this.snowFlakes.push(new SnowFlake());
+		}
+	}
+
+	update() {
+		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		this.snowFlakes.forEach(snowFlake => {
+			snowFlake.update();
+			// draw snow flake
+			this.ctx.save();
+      this.ctx.globalAlpha = snowFlake.alpha;
+      this.ctx.drawImage(imgs[snowFlake.sprite], snowFlake.x, snowFlake.y,snowFlake.radius,snowFlake.radius);
+			//this.ctx.fillStyle = snowColor;
+			//this.ctx.beginPath();
+			//this.ctx.arc(snowFlake.x, snowFlake.y, snowFlake.radius, 0, Math.PI * 2);
+			//this.ctx.closePath();
+			
+      
+			//this.ctx.fill();
+			this.ctx.restore();
+		});
+    this.ctx.filter = "blur(13px)";
+		requestAnimationFrame(this.updateBound);
+	}
+}
+
+// let it snow
+new Snow()
+}
+
+snow({
+  element: '.backlayer',
+  snowAmount: 30,
+  snowWidth: window.innerWidth,
+  snowHeight: window.innerHeight,
+  snowColor: '#fff',
+  snowSpeedX: 2,
+  snowSpeedY: 4,
+  snowSpeed: 0.001
+})
+
+
+</script>
+</html>

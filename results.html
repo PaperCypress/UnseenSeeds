@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<script src='/socket.io/socket.io.js'></script>
+<script>
+var name;
+var seed;
+var socket = io({
+  extraHeaders: {
+    "ngrok-skip-browser-warning": "1"
+  }
+});
+function buttonclick(input,btnid){
+ // e.preventDefault();
+  console.log(input);
+  socket.emit("PlayerInput",input);
+  seed=input;
+  document.getElementById("SecondScreen").classList.remove('hidden');
+  document.getElementById("FirstScreen").classList.add('hidden');
+
+  //document.getElementById(btnid).blur();
+}
+//ondisconnect
+//jump back when unity disconnect
+
+socket.on('RequestName',function(){
+  socket.emit("SetName",name);
+});
+
+</script>
+<title>看不見得種子</title>
+<style>
+
+@font-face {
+  font-family: "GenYoGothicB";
+  src: url("assets/GenYoGothicTW-Btrimmed.ttf") format("truetype");
+}
+@font-face {
+  font-family: "GenYoGothicR";
+  src: url("GenYoGothicTW-Rtrimmed.ttf") format("truetype");
+}
+  html{
+  }
+  body{
+    width: 100%;
+    height: 180.2vh;
+    //background-image: url("Images/result1.png");
+    background-size: contain;
+  }
+  h2{
+    font-family: "GenYoGothicB", sans-serif;
+    text-align:center;
+    font-size: 5.5em;
+    margin-top: 10vh;
+    letter-spacing: 0.15em;
+    color: #577343;
+    user-select: none;
+    margin-bottom: 0;
+  }
+  h3{
+    margin-top: 10.7vh;
+    font-family: "GenYoGothicR", sans-serif;
+    letter-spacing: 0.07em;
+    line-height: 2.01em;
+    font-size: 3.4em;
+    text-align:center;
+    color: #886d25;
+  }
+  .hidden{
+    display: none!important;
+  }
+  #TopScreen{
+  height: 100vh;
+  width: 100vw;
+  padding-top: 15.2em;
+  box-sizing: border-box;
+  background-image: url("Images/BG2.png");
+    background-size: contain;
+    position: relative;
+    z-index: 0;
+ }
+  #BottomScreen{
+  height:80.2vh;
+  width: 100vw;
+  z-index: 1;
+    position: relative;
+
+  } 
+ 
+.button{
+  padding: 0;
+  margin: -3.5vh auto 0 auto;
+  width: 16vh;
+  height: 16vh;
+  background-color: rgba(255, 255, 255, 0);
+  display: block;
+  border:none;
+  box-sizing: border-box;
+  transition: border 0.2s;
+  text-align: center;
+  text-decoration: none;
+  background-size: contain;
+
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.05s,box-shadow 0.05s;
+  -webkit-tap-highlight-color: transparent;
+}
+.button:active{
+    
+
+  
+}
+
+.button:focus{
+  outline: none;
+
+}
+
+#toptext{
+  background-image: url('Images/toptext.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 7vh;
+  width:100%;
+  position: absolute;
+  top: 9.5vh;z-index: 0;
+  background-position-x: center;
+}
+#flower{
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: bottom;
+  background-size: contain;
+  height: 60vh;
+  width:100%;
+  position: absolute;
+  bottom: 19.4vh;z-index: 0;
+}
+#poem{
+  background-image: url('Images/poem.png');
+  height: 26.8vh;width: auto;
+  background-repeat: no-repeat;
+  margin:0 auto 0 auto;
+  background-position-x: center;
+  background-size: contain;
+  z-index: 1;
+}
+#endnote{
+  background-image: url('Images/endnote.png');
+  height: 53vh;width: 100%;
+  background-repeat: no-repeat;
+  margin:0 auto 0 auto;
+  background-position-x: center;
+  background-size: contain;
+  z-index: 1;
+}
+#prompt{
+  background-image: url('assets/dialog1.png');
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 30vw;padding-top:1vw;
+}
+
+@media (max-aspect-ratio: 1/1) {
+    .button{
+      
+        }
+
+      
+
+      }
+</style>
+</head>
+
+<body>
+  
+
+<div id="TopScreen">
+<div id="toptext" data-aos="fade-up" data-aos-duration="8000"></div>  
+<!--
+<h3>選擇<span style="color: white;">笑笑種籽</span>的你，<br>有著散播歡愉與迷人的一面，<br>為土地創造無限生機。</h3>
+-->
+
+<h3 style="font-size: 2.2em;position: absolute;bottom: 5.3vh;width:100%;text-align:center;color: #846e3280;z-index: 1;">長按即可儲存圖片</h3>
+<div id="flower"></div>
+<div style="background-image: url('Images/mountain.png');height: 100vh;width:100%;position: absolute;bottom: -80vh;z-index: 0;background-position-x: center;" ></div>
+</div>
+<div id="BottomScreen">
+  <div id="poem" data-aos="fade-up" data-aos-duration="12000"></div>
+  <div id="endnote" data-aos="fade-up" data-aos-duration="12000"></div>
+</div>
+</body>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script>
+function getseed(){
+  var queryString = decodeURIComponent(window.location.search);
+    queryString = queryString.substring(1);
+    document.getElementById("flower").style.backgroundImage =  "url(Images/results"+queryString+"flower.png)";
+}
+
+
+
+
+window.addEventListener('load', function() {
+  AOS.init();
+    getseed();
+})
+</script>
+</html>
