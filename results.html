@@ -6,33 +6,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
-<script src='/socket.io/socket.io.js'></script>
-<script>
-var name;
-var seed;
-var socket = io({
-  extraHeaders: {
-    "ngrok-skip-browser-warning": "1"
-  }
-});
-function buttonclick(input,btnid){
- // e.preventDefault();
-  console.log(input);
-  socket.emit("PlayerInput",input);
-  seed=input;
-  document.getElementById("SecondScreen").classList.remove('hidden');
-  document.getElementById("FirstScreen").classList.add('hidden');
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  //document.getElementById(btnid).blur();
-}
-//ondisconnect
-//jump back when unity disconnect
 
-socket.on('RequestName',function(){
-  socket.emit("SetName",name);
-});
-
-</script>
 <title>看不見得種子</title>
 <style>
 
@@ -121,7 +97,22 @@ socket.on('RequestName',function(){
   outline: none;
 
 }
-
+#frontlayer{
+    display: block;
+    position: fixed;
+    top: 0;bottom: 0;
+    width: 110vw;height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    background-color: white;
+    opacity: 100%;
+    transition: opacity 0.4s;
+    left: -10vw;
+  }
+  
+  #frontlayer.fadeout{
+    opacity: 0;
+  }
 #toptext{
   background-image: url('Images/toptext.png');
   background-repeat: no-repeat;
@@ -180,7 +171,9 @@ socket.on('RequestName',function(){
 
 <body>
   
+  <div id="frontlayer">
 
+  </div>
 <div id="TopScreen">
 <div id="toptext" data-aos="fade-up" data-aos-duration="8000"></div>  
 <!--
@@ -209,12 +202,93 @@ function getseed(){
     document.getElementById("flower").style.backgroundImage =  "url(Images/results"+queryString+"flower.png)";
 }
 
+function saveCert(){
+  document.getElementById('canvasWrapper').clientWidth=document.getElementById('certImg').clientWidth;
+  document.getElementById('canvasWrapper').clientHeight=document.getElementById('certImg').clientHeight;
+  const c=document.querySelector("#certificate");
+  html2canvas(c).then(canvas => {
 
+      canvas.className = "html2canvas";
+      canvas.preserveDrawingBuffer = true;
+      document.getElementById("canvasWrapper").appendChild(canvas);
+
+      const image = canvas.toDataURL("image/png",1);
+      certImg=image;
+      var a  = document.createElement('a');
+    a.href = certImg;
+    a.download = 'Card.png';
+    
+    a.click()
+   
+  });
+
+  
+}
 
 
 window.addEventListener('load', function() {
   AOS.init();
     getseed();
+    document.getElementById("frontlayer").classList.add('fadeout');
 })
+</script>
+<script>
+var node = document.getElementsByTagName("p")[0];
+var longpress = false;
+var presstimer = null;
+var longtarget = null;
+
+var cancel = function(e) {
+    if (presstimer !== null) {
+        clearTimeout(presstimer);
+        presstimer = null;
+    }
+
+    this.classList.remove("longpress");
+};
+
+var click = function(e) {
+    if (presstimer !== null) {
+        clearTimeout(presstimer);
+        presstimer = null;
+    }
+
+    this.classList.remove("longpress");
+
+    if (longpress) {
+        return false;
+    }
+
+    alert("press");
+};
+
+var start = function(e) {
+    console.log(e);
+
+    if (e.type === "click" && e.button !== 0) {
+        return;
+    }
+
+    longpress = false;
+
+    this.classList.add("longpress");
+
+    if (presstimer === null) {
+        presstimer = setTimeout(function() {
+            alert("long click");
+            longpress = true;
+        }, 1000);
+    }
+
+    return false;
+};
+
+node.addEventListener("mousedown", start);
+node.addEventListener("touchstart", start);
+node.addEventListener("click", click);
+node.addEventListener("mouseout", cancel);
+node.addEventListener("touchend", cancel);
+node.addEventListener("touchleave", cancel);
+node.addEventListener("touchcancel", cancel);
 </script>
 </html>

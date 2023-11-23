@@ -10,26 +10,45 @@
 <script>
 var name;
 var seed;
+var chosen=false;
 //var socket = io({
   //extraHeaders: {
   //  "ngrok-skip-browser-warning": "1"
 //  }
 //}).connect('http://localhost:52300');;
-var socket = io.connect('http://localhost:52300');
+var socket = io.connect('https://floatingseeds.up.railway.app/');
 function buttonclick(input,btnid){
+  if(chosen){
+    console.log("chosen");
+    return;
+  }
  // e.preventDefault();
   console.log(input);
   socket.emit("PlayerInput",input);
   seed=input;
-  document.getElementById("SecondScreen").classList.remove('hidden');
-  document.getElementById("FirstScreen").classList.add('hidden');
-  //window.location.href = "/results?"+input;
+  
+  chosen=true;
+  var c=document.getElementById(btnid);
+  c.classList.add('chosen');
+  
+  if(c!=document.getElementById("one"))document.getElementById("one").classList.add('notchosen');
+  if(c!=document.getElementById("two"))document.getElementById("two").classList.add('notchosen');
+  if(c!=document.getElementById("three"))document.getElementById("three").classList.add('notchosen');
+  if(c!=document.getElementById("four"))document.getElementById("four").classList.add('notchosen');
+  if(c!=document.getElementById("five"))document.getElementById("five").classList.add('notchosen');
+  setTimeout(function() {
+    document.getElementById("frontlayer").classList.add('fadein');
+}, 1000);
 
-  //document.getElementById(btnid).blur();
+  setTimeout(function() {
+  window.location.href = "/results?"+input;
+}, 3000);
+
+ 
 }
 function namesubmit(){
   name =document.getElementById("name").value;
-  socket.emit("SetName",name);
+  //socket.emit("SetName",name);
   document.getElementById("username").innerHTML=name;
   document.getElementById("SecondScreen").classList.remove('hidden');
   document.getElementById("FirstScreen").classList.add('hidden');
@@ -94,6 +113,22 @@ socket.on('RequestName',function(){
     pointer-events: none;
     z-index: -1;
   }
+  #frontlayer{
+    display: block;
+    position: fixed;
+    top: 0;bottom: 0;
+    width: 110vw;height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    background-color: white;
+    opacity: 0%;
+    transition: opacity 2s;
+    left: -10vw;
+  }
+  
+  #frontlayer.fadein{
+    opacity: 100%;
+  }
   #SecondScreen{
   height: 100vh;
   width: 100vw;
@@ -123,19 +158,31 @@ socket.on('RequestName',function(){
   transition: border 0.2s;
   text-align: center;
   text-decoration: none;
-  
-
+  position: static;
+  filter: blur(0);
   font-size: 16px;
   cursor: pointer;
-  transition: transform 0.05s,box-shadow 0.05s;
+  transition: transform 1s,opacity 0.4s,blur 0.4s, width 1s,height 1s,position 0.6s,margin 0.4s;
   -webkit-tap-highlight-color: transparent;
-  //
+  
 }
 .button div{
   background-size: contain;
   width: 100%;
   height: 100%;
   
+}
+.button.chosen{
+  transform:translate(0,10vh)!important;
+  width: 25vh;
+  height: 25vh;
+}
+.button.notchosen{
+    margin-top:0;
+  filter: blur(10px);
+  opacity: 0;
+  width: 0vh;
+  height: 0vh;
 }
 .shakey{
   animation: floaty 6s ease-out infinite;
@@ -233,6 +280,9 @@ border-radius: 38px;
 
 <body>
   <div class="backlayer">
+
+  </div>
+  <div id="frontlayer">
 
   </div>
 <div id="FirstScreen">
