@@ -66,11 +66,11 @@ socket.on('RequestName',function(){
 <style>
 
 @font-face {
-  font-family: "GenYoGothicB";
+  font-family: GenYoGothicB;
   src: url("assets/GenYoGothicTW-Btrimmed.ttf") format("truetype");
 }
 @font-face {
-  font-family: "GenYoGothicR";
+  font-family: GenYoGothicR;
   src: url("assets/GenYoGothicTW-Rtrimmed.ttf") format("truetype");
 }
   html{
@@ -83,9 +83,13 @@ socket.on('RequestName',function(){
     background-image: url("Images/background.png");
     overflow: hidden;
     background-size: contain;
+    -webkit-font-smoothing: antialiased;
+    margin:0;
+    font-weight: lighter;
   }
   h2{
-    font-family: "GenYoGothicB", sans-serif;
+    font-family: GenYoGothicB, sans-serif;
+    -webkit-font-smoothing: antialiased;
     text-align:center;
     font-size: 3.6vh;
     margin-top: 10vh;
@@ -96,7 +100,8 @@ socket.on('RequestName',function(){
   }
   h3{
     margin-top: 0.4em;
-    font-family: "GenYoGothicR", sans-serif;
+    font-family: GenYoGothicR, sans-serif;
+    -webkit-font-smoothing: antialiased;
     letter-spacing: 0.1em;
     font-size: 2.36vh;
     text-align:center;
@@ -117,7 +122,7 @@ socket.on('RequestName',function(){
     display: block;
     position: fixed;
     top: 0;bottom: 0;
-    width: 110vw;height: 100%;
+    width: 120vw;height: 100%;
     pointer-events: none;
     z-index: 5;
     background-color: white;
@@ -263,7 +268,12 @@ socket.on('RequestName',function(){
 border-radius: 38px;
   border: 0;
 }
+.fixblur{
+  transform: translate3d(0, 0, 0);
+  filter: blur(13px);
 
+//fix for safari
+}
 
 
 
@@ -403,6 +413,8 @@ loadAllImages();
 class Snow {
 	constructor() {
 		this.canvas = document.createElement('canvas');
+    this.canvas.classList.add('fixblur');
+
 		document.querySelector(element).appendChild(this.canvas);
 		this.ctx = this.canvas.getContext('2d');
     
@@ -448,7 +460,7 @@ class Snow {
 			//this.ctx.fill();
 			this.ctx.restore();
 		});
-    this.ctx.filter = "blur(13px)";
+  //  this.ctx.filter = "blur(13px)";
 		requestAnimationFrame(this.updateBound);
 	}
 }
