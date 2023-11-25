@@ -62,7 +62,7 @@ socket.on('RequestName',function(){
   socket.emit("SetName",name);
 });
 </script>
-<title>看不見得種子</title>
+<title>看不見的種籽</title>
 <style>
 
 @font-face {
@@ -76,6 +76,7 @@ socket.on('RequestName',function(){
   html{
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
   }
   body{
     height: 100vh;
@@ -116,7 +117,7 @@ socket.on('RequestName',function(){
     top: 0;bottom: 0;
     width: 100%;height: 100%;
     pointer-events: none;
-    z-index: -1;
+    z-index: -2;
   }
   #frontlayer{
     display: block;
@@ -271,7 +272,7 @@ border-radius: 38px;
 .fixblur{
   transform: translate3d(0, 0, 0);
   filter: blur(13px);
-
+  z-index: -1;
 //fix for safari
 }
 
@@ -319,7 +320,15 @@ border-radius: 38px;
 
 </div>
 </body>
+<script type="text/javascript">
+
+  input.onfocus = function () {
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+}
+</script>
 <script>
+  
   document.getElementById("y1").style.animationDelay = "-0.2s";
   document.getElementById("y2").style.animationDelay = "-1.4s";
   document.getElementById("y3").style.animationDelay = "-7.2s";
